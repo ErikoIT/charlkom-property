@@ -9,6 +9,9 @@ const multer = require("multer");
 const methodOverride = require("method-override");
 const SqlString = require('sqlstring');
 const mysql = require("mysql");
+const http = require("http");
+const hostname = '127.0.0.1';
+const port = 3000;
 
 //testing
 
@@ -377,6 +380,12 @@ app.get("/logout", function (req, res) {
     res.redirect("/");
 });
 
-app.listen(port = process.env.PORT || 3000, function () {
-    console.log("Server Started");
-});
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    res.end('Hello World! NodeJS \n');
+  });
+  
+  server.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+  });
