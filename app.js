@@ -1,61 +1,18 @@
-require('dotenv/config');
+
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const ejs = require("ejs");
-const fs = require("fs");
 const path = require("path");
-const multer = require("multer");
 const methodOverride = require("method-override");
 const SqlString = require('sqlstring');
 const mysql = require("mysql");
-const http = require("http");
-const hostname = '127.0.0.1';
-const port = 3000;
-
-//testing
-
-//Creating Database
-
-var pool = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "charlkomdb"
-  });
-
-  
-
-// creating table properties
-//   const con = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "charlkomdb"
-//   });
-
-//   con.connect(function(err) {
-//     if (err) throw err;
-//     console.log("Connected!");
-//     var sql = "CREATE TABLE properties (id INT, estateName VARCHAR(255), address VARCHAR(255), beds INT, kitchen INT, parking INT, livingRoom INT, pools INT, mapURL VARCHAR(4000), units INT, price VARCHAR(250), shortDescription VARCHAR(250), img BLOB, detailDescription VARCHAR(8000), PRIMARY KEY (id))";
-//     con.query(sql, function (err, result) {
-//       if (err) throw err;
-//       console.log("Table created");
-//     });
-//   });
-
-// const pool = createPool({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     connectionLimit: 10
-// });
-
-// pool.query("SELECT * FROM charlkomDB.properties", (err, result)=>{
-//     console.log(result);
-// });
-
-
+const dotenv = require("dotenv");
+dotenv.config({ path: process.cwd() + '/config/config.env' });
+const multer = require('multer');
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
+const session = require("express-session");
 
 
 
@@ -65,19 +22,33 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(methodOverride("_method"));
+app.use(cookieParser());
+app.use(session({
+    key: "id",
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true,
+    // cookie: {
+    //     expires: 60 * 60 * 24,
+    // }
+}));
 
-//! Use of Multer
-const storage = multer.memoryStorage({
-    destination: (req, file, callBack) => {
-        callBack(null, path.join(__dirname, '/uploads/'))  
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads')
     },
-    filename: (req, file, callBack) => {
-        callBack(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '_' + Date.now()
+            + path.extname(file.originalname))
     }
 })
- 
-const upload = multer({
-    storage: storage
+var upload = multer({ storage: storage })
+
+var pool = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "charlkomdb"
 });
 
 
@@ -89,55 +60,42 @@ const postDate = today.toDateString().split(' ').slice(1).join(' ');
 
 
 
-// Image uploads
-// var con = mysql.createConnection({
-//     host: "localhost",
-//     user: "charlkom_charlkom",
-//     password: "Property1234$",
-//     database: "charlkom_charlkomdb"
-// });
-
-// Home Route
-
 app.get("/", function (req, res) {
-    pool.getConnection(function (err) {
-        if (err) throw err;
-        pool.query("SELECT * FROM properties", function (err, foundProperties) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.render("index", { allProperties: foundProperties });
-            }
-        });
+
+    pool.query("SELECT * FROM properties", function (err, foundProperties) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("index", { allProperties: foundProperties });
+        }
     });
 });
 
 app.get("/properties", function (req, res) {
-    pool.getConnection(function (err) {
-        if (err) throw err;
-        pool.query("SELECT * FROM properties", function (err, foundProperties) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.render("property", { allProperties: foundProperties });;
-            }
-        });
+
+    pool.query("SELECT * FROM properties", function (err, foundProperties) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("property", { allProperties: foundProperties });
+        }
     });
+
 });
 
 // Property Details
 app.get("/property/:id", function (req, res) {
     const requestedId = req.params.id;
-    pool.getConnection(function (err) {
-        pool.query(`SELECT * FROM properties WHERE id = '${requestedId}'`, function (err, foundProperties) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.render("propertydetails", { foundProp: foundProperties });
-            }
 
-        });
+    pool.query(`SELECT * FROM properties WHERE id = '${requestedId}'`, function (err, foundProperties) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("propertydetails", { foundProp: foundProperties });
+        }
+
     });
+
 
 });
 
@@ -157,29 +115,31 @@ app.get("/about", function (req, res) {
 
 
 app.get("/admin", function (req, res) {
-    pool.getConnection(function (err) {
+    if (req.session.user) {
         pool.query(`SELECT * FROM properties`, function (err, foundProp) {
             if (err) {
                 console.log(err);
             } else {
                 res.render("admin", { foundProp: foundProp });
             }
-
         });
-    });
+    } else {
+        res.redirect("/login");
+    }
+
 });
 
 
 app.get("/table", function (req, res) {
-    pool.getConnection(function (err) {
-        pool.query(`SELECT * FROM properties`, function (err, foundProp) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.render("admin", {foundProp: foundProp });
-            }
-        });
+
+    pool.query(`SELECT * FROM properties`, function (err, foundProp) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("admin", { foundProp: foundProp });
+        }
     });
+
 });
 
 app.get("/admins", function (req, res) {
@@ -190,7 +150,7 @@ app.get("/admins", function (req, res) {
 
 app.post('/admins', upload.single("image"), (req, res, next) => {
     const requestedId = req.params.id;
-    
+
 
     const propertyId = Math.floor(Math.random() * 1000000) + 1;
     const estateName = req.body.estname;
@@ -206,62 +166,51 @@ app.post('/admins', upload.single("image"), (req, res, next) => {
     const shortDesc = req.body.shortDesc;
     const image = req.file.filename;
     const detailDesc = req.body.detailDesc;
-    console.log(image)
 
-    pool.getConnection(function (err) {
 
-        var sql = `INSERT INTO properties (id, estateName, address, beds,  kitchen, livingRoom, parking, pools, mapURL, units, price, shortDescription, img, detailDescription) VALUES ('${propertyId}', '${estateName}', '${address}', '${beds}', '${kitchen}', '${livingRoom}', '${parking}', '${pools}', '${mapURL}', '${units}', '${price}', '${shortDesc}', '${image}', '${detailDesc}')`;
-        pool.query(sql, function (err, result) {
-            if (err) {
-                console.log(err);
-            }
-            console.log("1 record inserted");
-            res.redirect('/admins');
-        });
+    var sql = `INSERT INTO properties (id, estateName, address, beds,  kitchen, livingRoom, parking, pools, mapURL, units, price, shortDescription, img, detailDescription) VALUES ('${propertyId}', '${estateName}', '${address}', '${beds}', '${kitchen}', '${livingRoom}', '${parking}', '${pools}', '${mapURL}', '${units}', '${price}', '${shortDesc}', '${image}', '${detailDesc}')`;
+    pool.query(sql, function (err, result) {
+        if (err) {
+            console.log(err);
+        }
+        console.log("1 record inserted");
+        res.redirect('/admins');
     });
+
 });
 
 app.post("/delete", function (req, res) {
     const requestedId = req.body.propertyId;
-    pool.getConnection(function (err) {
-        var sql = `DELETE FROM properties WHERE id = '${requestedId}'`;
-        pool.query(sql, function (err, result) {
-            if (err) {
-                console.log(err);
-            }
-            console.log("Number of records deleted: " + result.affectedRows);
-            res.redirect("/admin");
-        });
+
+    var sql = `DELETE FROM properties WHERE id = '${requestedId}'`;
+    pool.query(sql, function (err, result) {
+        if (err) {
+            console.log(err);
+        }
+        console.log("Number of records deleted: " + result.affectedRows);
+        res.redirect("/admin");
     });
-    // const deletedId = req.body.propertyId;
-    // Property.findByIdAndRemove(deletedId, function (err) {
-    //     if (err) {
-    //         console.log(err);
-    //     } else {
-    //         console.log("Deleted Successfully");
-    //         res.redirect("/admin");
-    //     }
-    // });
+
 });
 
 app.get("/edit/:id", function (req, res, next) {
     const requestedId = req.params.id;
-    pool.getConnection(function (err) {
-        pool.query(`SELECT * FROM properties WHERE id = '${requestedId}'`, function (err, foundProperties) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.render("edit", { toUpdate: foundProperties });
-            }
 
-        });
+    pool.query(`SELECT * FROM properties WHERE id = '${requestedId}'`, function (err, foundProperties) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("edit", { toUpdate: foundProperties });
+        }
 
     });
+
+
 });
 
 app.put("/edit/:id", function (req, res, next) {
     const requestedId = req.params.id;
-  
+
     const estateName = req.body.estname;
     const address = req.body.address;
     const beds = req.body.beds;
@@ -302,28 +251,49 @@ app.put("/edit/:id", function (req, res, next) {
 
 //Blog
 app.get("/blog", function (req, res) {
-    
+
     pool.query(`SELECT * FROM blog`, function (err, foundPosts) {
         if (err) {
             console.log(err);
         } else {
-            res.render("blog", {posts: foundPosts });
+            res.render("blog", { posts: foundPosts });
         }
     });
 });
-    
+
 app.get("/blog/:id", function (req, res) {
     const requestedId = req.params.id;
-    pool.getConnection(function (err) {
-        pool.query(`SELECT * FROM blog WHERE id = '${requestedId}'`, function (err, foundPosts) {
-            if (err) {
-                console.log(err);
-            } else {
-                res.render("blogdetail", { posts: foundPosts });
-            }
 
-        });
+    pool.query(`SELECT * FROM blog WHERE id = '${requestedId}'`, function (err, foundPosts) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("blogdetail", { posts: foundPosts });
+        }
 
+    });
+});
+
+app.get("/post-blog", function (req, res) {
+    res.render("post-blog");
+});
+
+app.post("/post-blog", function (req, res) {
+    const title = req.body.title;
+    console.log(title);
+    const body = req.body.body;
+    console.log(body);
+    const image = req.file;
+    var sql = `INSERT INTO blog (title, img, date, body) VALUES('${title}', '${image}', '${postDate}', '${body}')`;
+        pool.query(sql, (err)=>{
+        if (err) {
+            console.log(err);
+        } else {
+            return res.render("post-blog",
+                {
+                    successMessage: "Blog added successfully"
+                });
+        }
     });
 });
 
@@ -332,23 +302,39 @@ app.get("/register", function (req, res) {
     res.render("register");
 });
 
-// app.post("/register", function (req, res) {
-//     if (req.body.password === req.body.confirmpass) {
-//         User.register({username: req.body.email}, req.body.password, function(err, user){
-//             if (err) {
-//               console.log(err);
-//             //   res.redirect("/register");
-//             } else {
-//               passport.authenticate("local")(req, res, function(){
-//                 res.redirect("/admin");
-//               });
-//             }
-//           });
-//     }else{
-//         console.log("Password does not match");
-//         res.redirect("/register");
-//     }
-// });
+app.post("/register", function (req, res) {
+
+    const { username, email, password, confirmpassword } = req.body;
+
+
+    pool.query(`SELECT email FROM users WHERE email = ?`, [email], async (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        if (result.length > 0) {
+            return res.render("register",
+                {
+                    message: "The email is already registered"
+                });
+        } else if (password !== confirmpassword) {
+            return res.render("register",
+                {
+                    message: "Password do not match"
+                });
+        }
+        let hashedPassword = await bcrypt.hash(password, 10);
+        pool.query(`INSERT INTO users SET ?`, { name: username, email: email, password: hashedPassword }, (err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                return res.render("register",
+                    {
+                        successMessage: "User registered successfully"
+                    });
+            }
+        });
+    });
+});
 
 //Login
 app.get("/login", function (req, res) {
@@ -356,36 +342,38 @@ app.get("/login", function (req, res) {
 });
 
 app.post("/login", function (req, res) {
-    const username = req.body.email
-    const password = req.body.password
-
-    User.findOne({ email: username }, function (err, foundUser) {
+    const { username, password } = req.body;
+    pool.query("SELECT * FROM users WHERE email = ?;", [username], (err, result) => {
         if (err) {
             console.log(err);
-        } else {
-            if (foundUser) {
-                bcrypt.compare(password, foundUser.password, function (err, result) {
-                    if (result === true) {
-                        res.redirect("/admin");
-                    }
-                });
-            }
         }
-    });
+        if (result.length > 0) {
+            bcrypt.compare(password, result[0].password, (err, response) => {
+                if (response) {
+                    req.session.user = result;
+                    res.redirect("/admin");
+                } else {
+                    return res.render("login",
+                        {
+                            message: "Wrong username or password"
+                        });
+                }
+            });
+        } else {
+            res.render("login",
+                { message: "User doesn't exists" });
+        }
+    }
+    );
 });
 
 //Logout
 app.get("/logout", function (req, res) {
-    req.logout();
+    res.clearCookie('user');
     res.redirect("/");
 });
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello World! NodeJS \n');
-  });
-  
-  server.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}/`);
-  });
+app.listen(process.env.PORT || 3000, function () {
+    console.log("Server Started");
+});
+

@@ -119,7 +119,7 @@
                 </select>
               </div>
               <div class="col-lg-3 col-sm-4">
-                <button class="btn btn-success" onclick="window.location.href='buysalerent.php'">Find Now</button>
+                <button class="btn btn-success" onclick="window.location.href=''">Find Now</button>
               </div>
             </div>
 
@@ -127,7 +127,7 @@
           </div>
           <div class="col-lg-5 col-lg-offset-1 col-sm-6 ">
             <p>Join now and get updated with all the properties deals.</p>
-            <button class="btn btn-info" data-toggle="modal" data-target="#loginpop">Login</button>
+            <a class="btn btn-info" href="/login">Login</a>
           </div>
         </div>
       </div>
@@ -135,12 +135,12 @@
   </div>
   <!-- banner -->
   <div class="container">
-    <div class="properties-listing spacer"> <a href="buysalerent.php" class="pull-right viewall">View All Listing</a>
+    <div class="properties-listing spacer"> <a href="/property" class="pull-right viewall">View All Listing</a>
       <h2>Featured Properties</h2>
       <div id="owl-example" class="owl-carousel">
         <% allProperties.forEach((property)=>{ %>
           <div class="properties">
-            <div class="image-holder"><img src="/uploads/<%= property.img %>" class="img-responsive" alt="properties" />
+            <div class="image-holder"><img src="/uploads/<%=property.img%>" class="img-responsive" alt="properties" />
               <div class="status sold">Sold</div>
             </div>
             <h4><a href="/property/<%= property.id %>">
@@ -234,6 +234,9 @@
                   </div>
                 </div>
               </div>
+              <a href="https://api.whatsapp.com/send?phone=51955081075&text=Hola%21%20Quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Varela%202." class="float" target="_blank">
+                <i class="fa fa-whatsapp my-float"></i>
+                </a>
             </div>
           </div>
         </div>
