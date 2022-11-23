@@ -22638,4 +22638,16 @@ dl li {
   outline: 1px solid slategrey;
 }
 
-/*# sourceMappingURL=maps/style.css.map */
+/*Preloader*/
+#aa-preloader-area {
+	position: fixed; 
+	background: #F8F8F8 url("/images/loader.gif") no-repeat center;
+	overflow: visible;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+  }

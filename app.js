@@ -51,6 +51,13 @@ var pool = mysql.createConnection({
     database: "charlkomdb"
 });
 
+// var pool = mysql.createConnection({
+//     host: "localhost",
+//     user: "charlkom_charlkom",
+//     password: "3R7+XudVD4rb",
+//     database: "charlkom_charlkomdb"
+//   });
+
 
 
 //Date
@@ -136,7 +143,7 @@ app.get("/table", function (req, res) {
         if (err) {
             console.log(err);
         } else {
-            res.render("admin", { foundProp: foundProp });
+            res.render("table", { foundProp: foundProp });
         }
     });
 
@@ -172,9 +179,13 @@ app.post('/admins', upload.single("image"), (req, res, next) => {
     pool.query(sql, function (err, result) {
         if (err) {
             console.log(err);
+        }else{
+            return res.render("input",
+            {
+                successMessage: "Property added succesfully"
+            });
         }
-        console.log("1 record inserted");
-        res.redirect('/admins');
+       
     });
 
 });
@@ -278,23 +289,80 @@ app.get("/post-blog", function (req, res) {
     res.render("post-blog");
 });
 
-app.post("/post-blog", function (req, res) {
+app.post("/post-blog", upload.single("image"), (req, res, next)=> {
     const title = req.body.title;
-    console.log(title);
     const body = req.body.body;
-    console.log(body);
-    const image = req.file;
-    var sql = `INSERT INTO blog (title, img, date, body) VALUES('${title}', '${image}', '${postDate}', '${body}')`;
-        pool.query(sql, (err)=>{
-        if (err) {
+    const image = req.file.filename;
+    if (title && body) {
+        var sql = `INSERT INTO blog (title, img, date, body) VALUES('${title}', '${image}', '${postDate}', '${body}')`;
+        pool.query(sql, (err) => {
+            if (err) {
+                console.log(err);
+            } else {
+                return res.render("post-blog",
+                    {
+                        successMessage: "Blog added successfully"
+                    });
+            }
+        });
+    } else {
+        return res.render("post-blog",
+            {
+                errorMessage: "Title and body can't be empty"
+            });
+    }
+});
+
+//Add land routes
+
+app.get("/land", (req, res)=>{
+    pool.query(`SELECT * FROM lands`, (err, foundProp)=>{
+        if(err){
             console.log(err);
-        } else {
-            return res.render("post-blog",
-                {
-                    successMessage: "Blog added successfully"
-                });
+        }else{
+            res.render("land", {allProp: foundProp});
         }
     });
+});
+
+app.get("/add-land", (req, res)=>{
+   res.render("add-land");
+});
+
+app.post("/add-land", upload.single("image"), (req, res)=>{
+    const propName = req.body.propName;
+    const address = req.body.address;
+    const mapURL = req.body.mapURL;
+    const price = req.body.price;
+    const size = req.body.size;
+    const image = req.file.filename;
+    const detailDesc = req.body.detailDesc;
+
+    const sql = `INSERT INTO lands (name, address, mapURL, price, size, img, description) VALUES('${propName}', '${address}', '${mapURL}', '${price}', '${size}', '${image}', '${detailDesc}')`;
+    pool.query(sql, (err)=>{
+        if(err){
+            console.log(err);
+        }else{
+            return res.render("add-land",
+            {
+                successMessage: "Property added successfully"
+            });
+        }
+    });
+});
+
+app.get("/manage-land", (req, res)=>{
+    if(req.session.user){
+        pool.query(`SELECT * FROM lands`, function (err, foundProp) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render("manage-land", { foundProp: foundProp });
+            }
+        });
+    }else{
+        res.redirect("/login");
+    }
 });
 
 //Register

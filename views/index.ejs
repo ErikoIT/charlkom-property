@@ -1,6 +1,5 @@
 <%- include('partials/header') %>
 
- 
   <div class="">
 
 
@@ -140,8 +139,12 @@
       <div id="owl-example" class="owl-carousel">
         <% allProperties.forEach((property)=>{ %>
           <div class="properties">
+            <div class="type">
+              <h6>For Sale</h6>
+            </div>
             <div class="image-holder"><img src="/uploads/<%=property.img%>" class="img-responsive" alt="properties" />
-              <div class="status sold">Sold</div>
+              <div class="status sold">Units <%= property.units %>
+              </div>
             </div>
             <h4><a href="/property/<%= property.id %>">
                 <%= property.shortDescription %>
@@ -149,6 +152,7 @@
             <p class="price">
               <%= property.price %>
             </p>
+
             <div class="listing-detail"><span data-toggle="tooltip" data-placement="bottom"
                 data-original-title="Bed Room">
                 <%= property.beds %>
@@ -201,45 +205,47 @@
                   </div>
                 </div>
               </div>
-              <div class="item">
-                <div class="row">
-                  <div class="col-lg-4"><img src="images/properties/2.jpg" class="img-responsive" alt="properties" />
-                  </div>
-                  <div class="col-lg-8">
-                    <h5><a href="property-detail.php">Integer sed porta quam</a></h5>
-                    <p class="price">Ksh 3.8M</p>
-                    <a href="property-detail.php" class="more">More Detail</a>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="row">
-                  <div class="col-lg-4"><img src="images/properties/3.jpg" class="img-responsive" alt="properties" />
-                  </div>
-                  <div class="col-lg-8">
-                    <h5><a href="property-detail.php">Integer sed porta quam</a></h5>
-                    <p class="price">Ksh 3.8M</p>
-                    <a href="property-detail.php" class="more">More Detail</a>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="row">
-                  <div class="col-lg-4"><img src="images/properties/4.jpg" class="img-responsive" alt="properties" />
-                  </div>
-                  <div class="col-lg-8">
-                    <h5><a href="property-detail.php">Integer sed porta quam</a></h5>
-                    <p class="price">Ksh 3.8M</p>
-                    <a href="property-detail.php" class="more">More Detail</a>
-                  </div>
-                </div>
-              </div>
-              <a href="https://api.whatsapp.com/send?phone=51955081075&text=Hola%21%20Quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Varela%202." class="float" target="_blank">
-                <i class="fa fa-whatsapp my-float"></i>
-                </a>
             </div>
+
           </div>
         </div>
+        <script>
+          var url = 'https://wati-integration-service.clare.ai/ShopifyWidget/shopifyWidget.js?95725';
+          var s = document.createElement('script');
+          s.type = 'text/javascript';
+          s.async = true;
+          s.src = url;
+          var options = {
+            "enabled": true,
+            "chatButtonSetting": {
+              "backgroundColor": "#4dc247",
+              "ctaText": "",
+              "borderRadius": "25",
+              "marginLeft": "0",
+              "marginBottom": "50",
+              "marginRight": "50",
+              "position": "right"
+            },
+            "brandSetting": {
+              "brandName": "Charlkom",
+              "brandSubTitle": "Typically replies within a day",
+              "brandImg": "https://cdn.clare.ai/wati/images/WATI_logo_square_2.png",
+              "welcomeText": "Hi there! welcome to Charlkom Properties.\nHow can I help you?",
+              "messageText": "Hello, I welcome to Charlkom Properties",
+              "backgroundColor": "#0a5f54",
+              "ctaText": "Start Chat",
+              "borderRadius": "25",
+              "autoShow": false,
+              "phoneNumber": "254707259336"
+            }
+          };
+          s.onload = function () {
+            CreateWhatsappChatWidget(options);
+          };
+          var x = document.getElementsByTagName('script')[0];
+          x.parentNode.insertBefore(s, x);
+        </script>
+
       </div>
     </div>
   </div>

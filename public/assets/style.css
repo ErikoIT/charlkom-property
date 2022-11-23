@@ -56,7 +56,31 @@ h6 span{margin-right: 5px; font-size: 12px;}
 	margin-top:16px;
 }
 
+.type{
+	background-color: #0047BE;
+	width: 30%;
+	font-size: 1rem;
+}
+
+.type h6{
+	color: #fff;
+	font-weight: bold;
+}
+
 /* =========== Preloader =========== */
+/*Preloader*/
+#aa-preloader-area {
+	position: fixed; 
+	background: #F8F8F8 url("/images/loader.gif") no-repeat center;
+	overflow: visible;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+  }
 
 
 p{margin-bottom: 30px;}
@@ -67,13 +91,13 @@ a:hover{color:#333;}
 .fullwidth{width: 100%;}
 select,input{outline: 0; margin-bottom: 20px;}
 a.more{background-color: #222; padding: 2px 6px;color: #ffffff; text-transform: uppercase; font-size: 11px;}
-a.more:hover{background: #FFC23C;text-decoration: none;}
+a.more:hover{background:  #FEEF22;text-decoration: none;}
 
 table{background-color: #ffffff;}
 
 .btn{border-radius: 5px; font-family: din; outline: none;}
-.btn-success{ background: #FFC23C;border:1px solid #FFC23C;padding:6px 20px; font-size:16px; width: 100%; }
-.btn-primary{ background: #FFC23C;border:none;width: 100%;border-radius: 20px;}
+.btn-success{ background:  #FEEF22;border:1px solid  #FEEF22;padding:6px 20px; font-size:16px; width: 100%; }
+.btn-primary{ background:  #FEEF22;border:none;width: 100%;border-radius: 20px;}
 .btn-info{background: #333;border:4px solid #ddd;padding: 3px 20px; font-size:20px; border-radius: 20px;  }
 
 .thumbnail{ background-color:#ffffff;}
@@ -84,9 +108,9 @@ table{background-color: #ffffff;}
 .header ul li a{ font-size: 19px;font-family: bt;text-transform: uppercase;}
 .header ul li a:hover{text-decoration: none;}
 
-.navbar-inverse{background-color: #1D1CE5}
+.navbar-inverse{background-color: #0047BE}
 .navbar-inverse .navbar-nav > li > a{font-size: 11px;padding-top: 10px;padding-bottom: 10px;font-family: bt;text-transform: uppercase;}
-.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus{background-color: #FFC23C;}
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus{background-color:  #FEEF22;}
 
 .banner-search{background:url(../images/bginside.jpg) #800000;color: #ffffff;padding: 20px 0 10px 0; font-size: 16px;}
 .banner-search h3{color: #ffffff;}
@@ -101,10 +125,11 @@ table{background-color: #ffffff;}
 
 .listing-detail{margin-bottom: 30px;}
 .listing-detail span{color: #ffffff; width: 25px; height: 25px; background-color: #555;display: inline-block;border-radius:25px; text-align: center;line-height: 26px; font-size: 14px;cursor: crosshair;}
-.listing-detail span:hover{background: #FFC23C;}
+.listing-detail span:hover{background:  #FEEF22
+	;}
 
 
-.status.sold{background: #1D1CE5;}
+.status.sold{background: #0047BE;}
 .status.new{background:rgba(190,7,46,0.8);}
 
 .recommended{position: relative;}
@@ -123,7 +148,7 @@ table{background-color: #ffffff;}
 .login button,.register button,.contact button{width: 100%;border-radius: 5px;}
 
 /*inside*/
-.inside-banner{background: #1D1CE5;color: #ffffff; padding: 30px 0; margin: 0 7%; border-radius: 20px;}
+.inside-banner{background: #0047BE;color: #ffffff; padding: 30px 0; margin: 0 7%; border-radius: 20px;}
 .inside-banner h2{margin: 0; color: #ffffff;}
 .inside-banner span{margin-top: 10px;}
 
@@ -142,7 +167,7 @@ table{background-color: #ffffff;}
 .property-info{margin:0 0 30px 0;}
 .property-info span{margin-right: 5px;}
 .property-info p{margin-bottom:10px; }
-.property-info p.price{font-size: 28px;color: #FFC23C;padding:0;border-radius: 5px;}
+.property-info p.price{font-size: 28px;color:  #FEEF22;padding:0;border-radius: 5px;}
 .property-info .profile{margin-top: 30px;}
 .property-info .profile p{padding-left: 20px; color: #999;}
 
@@ -150,7 +175,7 @@ table{background-color: #ffffff;}
 .enquiry button{border-radius: 5px;}
 
 .blog .info{color: #999;margin-bottom: 10px;font-size: 12px;}
-.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{background-color: #72b70f;border-radius: 0;color: #fff;border: none;}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus{background-color: #0047BE;border-radius: 0;color: #fff;border: none;}
 .blog .tabbable .tab-content ul li{margin: 15px 0;}
 .blog .row{margin-bottom: 50px;}
 

@@ -86,9 +86,42 @@
               our team we frequently use the services of many fine local professionals such as home inspectors, stagers, various 
               contractors, vendors and service providers.</p><br>
         </div>
-        <a href="https://api.whatsapp.com/send?phone=51955081075&text=Hola%21%20Quisiera%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Varela%202." class="float" target="_blank">
-          <i class="fa fa-whatsapp my-float"></i>
-          </a>
+        <script>
+          var url = 'https://wati-integration-service.clare.ai/ShopifyWidget/shopifyWidget.js?95725';
+          var s = document.createElement('script');
+          s.type = 'text/javascript';
+          s.async = true;
+          s.src = url;
+          var options = {
+        "enabled":true,
+        "chatButtonSetting":{
+            "backgroundColor":"#4dc247",
+            "ctaText":"",
+            "borderRadius":"25",
+            "marginLeft":"0",
+            "marginBottom":"50",
+            "marginRight":"50",
+            "position":"right"
+        },
+        "brandSetting":{
+            "brandName":"Charlkom",
+            "brandSubTitle":"Typically replies within a day",
+            "brandImg":"https://cdn.clare.ai/wati/images/WATI_logo_square_2.png",
+            "welcomeText":"Hi there! welcome to Charlkom Properties.\nHow can I help you?",
+            "messageText":"Hello, I welcome to Charlkom Properties",
+            "backgroundColor":"#0a5f54",
+            "ctaText":"Start Chat",
+            "borderRadius":"25",
+            "autoShow":false,
+            "phoneNumber":"254723800155"
+        }
+      };
+          s.onload = function() {
+              CreateWhatsappChatWidget(options);
+          };
+          var x = document.getElementsByTagName('script')[0];
+          x.parentNode.insertBefore(s, x);
+      </script>
       </div>
     </div>
   </div>

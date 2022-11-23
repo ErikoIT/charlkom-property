@@ -78,20 +78,10 @@ $(function () {
 });
 
 /* =========== Preloader =========== */
-const wait = (delay = 0) =>
-  new Promise(resolve => setTimeout(resolve, delay));
+// jQuery(window).load(function() { // makes sure the whole site is loaded      
+//   jQuery('#aa-preloader-area').delay(300).fadeOut('slow'); // will fade out      
+// })
 
-const setVisible = (elementOrSelector, visible) =>
-  (typeof elementOrSelector === 'string'
-    ? document.querySelector(elementOrSelector)
-    : elementOrSelector
-  ).style.display = visible ? 'block' : 'none';
-
-setVisible('.page', false);
-setVisible('#loading', true);
-
-document.addEventListener('DOMContentLoaded', () =>
-  wait(1000).then(() => {
-    setVisible('.page', true);
-    setVisible('#loading', false);
-  }));
+$(window).on('load', function () {
+  $("#aa-preloader-area").delay(300).fadeOut("slow");
+  });

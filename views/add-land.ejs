@@ -47,9 +47,9 @@
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Property Entry</h4>
-                  <form class="form-sample" action="/admins" method="post" enctype="multipart/form-data">
+                  <form class="form-sample" action="/add-land" method="post" enctype="multipart/form-data">
                     <p class="card-description">
-                      New Property
+                      New Land
                     </p>
                     <% if (locals.successMessage) {%>
                       <h4 class="alert alert-success"><%= successMessage %></h4>
@@ -57,9 +57,9 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Estate Name</label>
+                          <label class="col-sm-3 col-form-label">Property Name</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="estname" />
+                            <input type="text" class="form-control" name="propName" />
                           </div>
                         </div>
                       </div>
@@ -75,64 +75,9 @@
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Bed Rooms No</label>
+                          <label class="col-sm-3 col-form-label">Map URL</label>
                           <div class="col-sm-9">
-                             <input type="text" class="form-control" name="beds" />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Kitchen</label>
-                          <div class="col-sm-9">
-                             <input type="text" class="form-control" name="kitchen" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Parking Slots</label>
-                          <div class="col-sm-9">
-                             <input type="text" class="form-control" name="parking" />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Living Rooms</label>
-                          <div class="col-sm-9">
-                             <input type="text" class="form-control" name="rooms" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">No of Pools</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" name="pool" />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Map Url</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" name="map" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Units</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" name="units" />
+                             <input type="text" class="form-control" name="mapURL" />
                           </div>
                         </div>
                       </div>
@@ -140,32 +85,35 @@
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Price</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" name="price" />
+                             <input type="text" class="form-control" name="price" />
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Short Description</label>
-                          <div class="col-sm-9">
-                            <input type="text" class="form-control" name="shortDesc" />
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">size</label>
+                            <div class="col-sm-9">
+                               <input type="text" class="form-control" name="size" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label class="col-sm-3 col-form-label">Image</label>
+                            <div class="col-sm-9">
+                               <input type="file" class="form-control" name="image" />
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label class="col-sm-3 col-form-label">Image</label>
-                          <div class="col-sm-9">
-                            <input type="file" class="form-control" name="image" id="image" value="" />
-                          </div>
-                        </div>
-                      </div>
+                   
+                    <div class="row">
                       <div class="col-md-12">
                         <div class="form-group row">
                           <label class="col-sm-3 col-form-label">Detail Description</label>
-                          <div class="col-sm-9">
+                          <div class="col-sm-12">
                             <script src="https://cdn.ckeditor.com/4.9.1/standard/ckeditor.js"></script>
                             <textarea rows="6" class="form-control" placeholder="Address" name="detailDesc"></textarea>
                             <script>
